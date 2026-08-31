@@ -16,6 +16,7 @@ const path = require('path');
 const { classify } = require('../server/classify');
 const { writeNote, toFilename, today } = require('../server/note');
 const inbox = require('../server/inbox');
+const ingest = require('../server/ingest');
 
 const FOLDERS = ['English writing', 'Substack-archive', 'Work-PM-AI', 'buddhism', 'literature'];
 
@@ -274,6 +275,45 @@ test('a ticked-off entry survives pruning even if the file is gone', () => {
   assert.match(fs.readFileSync(box, 'utf8'), /Gone/);
 
   fs.rmSync(vault, { recursive: true, force: true });
+});
+
+// ---------------------------------------------------------------- agents
+
+console.log('\nagent detection');
+
+test('with no agent installed, nothing is resolved', () => {
+  const cfg = { ingest: { agents: [{ command: 'definitely-not-a-real-agent', args: [] }] } };
+  assert.strictEqual(ingest.resolveAgent(cfg), null);
+});
+
+test('auto picks the first agent that is actually installed', () => {
+  // "node" stands in for an agent here — it is guaranteed to be on the machine.
+  const cfg = { ingest: { command: 'auto', agents: [
+    { command: 'not-installed-either', args: ['--x'] },
+    { command: 'node', args: ['--eval'] },
+  ] } };
+  const agent = ingest.resolveAgent(cfg);
+  assert.strictEqual(agent.command, 'node');
+  assert.deepStrictEqual(agent.args, ['--eval']);
+});
+
+test('an explicitly named command overrides the search', () => {
+  const cfg = { ingest: { command: 'node', agents: [{ command: 'node', args: ['--eval'] }] } };
+  assert.strictEqual(ingest.resolveAgent(cfg).command, 'node');
+});
+
+test('the error names every agent it looked for', () => {
+  const cfg = { vaultPath: '/tmp', ingest: { mode: 'auto', command: 'auto',
+    agents: [{ command: 'nope-a', args: [] }, { command: 'nope-b', args: [] }] } };
+  const result = ingest.start(cfg, 'raw/x.md', '/tmp/clipper-test-ingest.log');
+  assert.strictEqual(result.started, false);
+  assert.match(result.reason, /nope-a, nope-b/);
+});
+
+test('more than one AI is supported out of the box', () => {
+  const names = ingest.knownAgentNames({});
+  assert.ok(names.includes('claude'));
+  assert.ok(names.length >= 4, 'should ship with several agents, not just one');
 });
 
 // ---------------------------------------------------------------- done

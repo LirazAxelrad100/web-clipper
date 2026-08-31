@@ -141,23 +141,26 @@ wiki now*, and the file is written before the agent is even started — so a
 failed ingest can never cost you the clip.
 
 This needs a **command line** AI agent, which is a different program from a
-desktop app. It is not tied to any one provider — the clipper just runs whatever
-command you name, from the vault folder, with `{{path}}` swapped for the new
-file:
+desktop app — a desktop app has no command a background helper can run.
 
-| Agent | `command` | `args` |
-| --- | --- | --- |
-| Claude Code | `claude` | `["-p", "--permission-mode", "acceptEdits"]` |
-| Gemini CLI | `gemini` | `["-p", "--yolo"]` |
-| Codex CLI | `codex` | `["exec", "--full-auto"]` |
-| Aider | `aider` | `["--yes", "--message"]` |
-| Anything else | your script | whatever it takes before the prompt |
+**No lock-in by design.** With `command: "auto"` (the default) the helper looks
+for each of these and uses whichever you actually have installed:
 
-Switching AI later means editing two lines of `config.json`. Nothing else in the
-clipper knows or cares which one you use.
+`claude` · `gemini` · `codex` · `opencode` · `cursor-agent` · `aider` · `llm`
 
-Output goes to `logs/ingest.log`. Each clip is still recorded in the inbox, so
-you keep a list of everything that was ingested.
+So switching AI means installing a different CLI. There is no config to edit and
+nothing in the code to change. Adding another agent to the list is two lines in
+`server/ingest.js`. To override the search — or point at a script of your own —
+name a `command` explicitly:
+
+```json
+"ingest": { "mode": "auto", "command": "/Users/me/bin/my-ingest.sh" }
+```
+
+The agent runs with the vault as its working directory and gets the prompt as
+its last argument, with `{{path}}` replaced by the new file. Output goes to
+`logs/ingest.log`, and each clip is still recorded in the inbox, so you keep a
+list of everything that was ingested.
 
 ## Development
 

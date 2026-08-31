@@ -10,23 +10,21 @@
 
   "ingest": {
     "_comment": [
-      "mode 'inbox'  — just queue the clip in the inbox file (default, nothing to install)",
-      "mode 'auto'   — run the command below straight after saving",
-      "mode 'off'    — do neither",
+      "mode 'inbox' — queue the clip in the inbox file (default, nothing to install)",
+      "mode 'auto'  — run an AI agent straight after saving",
+      "mode 'off'   — do neither",
       "",
-      "'command' is any command line AI agent. It is not tied to Claude:",
-      "  Claude Code : command 'claude',  args ['-p', '--permission-mode', 'acceptEdits']",
-      "  Gemini CLI  : command 'gemini',  args ['-p', '--yolo']",
-      "  Codex CLI   : command 'codex',   args ['exec', '--full-auto']",
-      "  Aider       : command 'aider',   args ['--yes', '--message']",
-      "  Your own    : any script that takes the prompt as its last argument",
+      "command 'auto' means: use whichever agent CLI is actually installed.",
+      "Claude, Gemini, Codex, OpenCode, Cursor and Aider are all recognised, so",
+      "switching AI is a matter of installing a different one — no config edit,",
+      "no code change. Name a command explicitly (or give a path to your own",
+      "script) to override the search.",
       "",
-      "It runs with the vault as its working directory, and {{path}} is replaced",
-      "with the new file's path inside the vault."
+      "The agent runs with the vault as its working directory, and {{path}} is",
+      "replaced with the new file's path inside the vault."
     ],
     "mode": "inbox",
-    "command": "claude",
-    "args": ["-p", "--permission-mode", "acceptEdits"],
+    "command": "auto",
     "promptTemplate": "ingest {{path}}",
     "timeoutMinutes": 20
   }

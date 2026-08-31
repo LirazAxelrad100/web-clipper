@@ -134,6 +134,7 @@ async function handleSuggest(req, res) {
   if (CONFIG.inboxEnabled) inbox.prune(CONFIG.inboxPath, CONFIG.vaultPath);
 
   const ingestOpts = ingest.settings(CONFIG.raw);
+  const agent = ingest.resolveAgent(CONFIG.raw);
 
   sendJson(res, 200, {
     folders,
@@ -142,7 +143,8 @@ async function handleSuggest(req, res) {
     score: result.score,
     pendingIngest: CONFIG.inboxEnabled ? inbox.pendingCount(CONFIG.inboxPath) : 0,
     ingestMode: ingestOpts.mode,
-    ingestReady: ingestOpts.mode !== 'auto' || Boolean(ingest.findCommand(ingestOpts.command)),
+    ingestReady: ingestOpts.mode !== 'auto' || Boolean(agent),
+    ingestAgent: agent ? agent.command : null,
   });
 }
 

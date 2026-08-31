@@ -85,13 +85,18 @@ command from the vault folder with `{{path}}` replaced by the new file, log to
 *before* the agent starts, so a failed ingest can never lose a clip. If the
 command is missing it says so in the popup rather than failing silently.
 
-**To switch it on**, install a command line agent and set `mode: "auto"`:
+**To switch it on**, install *any* command line agent and set `mode: "auto"`.
 
-    npm install -g @anthropic-ai/claude-code
+**No lock-in was an explicit requirement**, so it is built in structurally
+rather than documented as an option. `command: "auto"` searches for `claude`,
+`gemini`, `codex`, `opencode`, `cursor-agent`, `aider` and `llm`, and uses the
+first one installed — each with the right flags for unattended running. Changing
+AI is therefore an install, not a config edit. Naming a `command` explicitly
+overrides the search, including a path to a hand-written script. Adding an agent
+to the list is two lines in `server/ingest.js`.
 
-It is deliberately not Claude-specific — `command` and `args` are config, so
-Gemini CLI, Codex CLI, Aider or a hand-written script work just as well. That
-was a requirement: no lock-in to one AI.
+Do not reintroduce a hard-coded `claude` anywhere. It was there in an early
+draft and was removed deliberately.
 
 **The judgement call.** Even once the CLI exists, `"inbox"` stays the default.
 An automatic ingest rewrites wiki pages without showing anything first, and the
