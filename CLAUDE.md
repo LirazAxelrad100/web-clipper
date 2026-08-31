@@ -122,6 +122,29 @@ runs.
 
 - Watch which pages get filed wrong and tune `server/rules.json` — it is re-read
   on every clip, so no restart is needed.
-- `bash install/install.sh` to make the helper start at login (not run yet).
 - Possible later: AI fallback for pages no rule matches; capturing published
   dates more reliably on Substack.
+- Cosmetic: SuttaCentral only writes a real `og:description` for some texts, so
+  short ones (e.g. Dhp 227) pick up the site-wide blurb instead. Left alone —
+  detecting a "generic" description reliably is more fragile than the noise it
+  would remove.
+
+## Notes from running it
+
+**The helper is installed as a LaunchAgent** (`com.liraz.wiki-clipper`) and
+starts at login. If it ever looks dead, check `logs/clipper.error.log`:
+"Port 4141 is already in use" means a second copy is running — kill the stray
+one and `launchctl kickstart -k gui/$UID/com.liraz.wiki-clipper`. Starting the
+helper by hand with `npm start` while the LaunchAgent is installed causes
+exactly this, and launchd eventually stops retrying.
+
+**The extension must be reloaded** at `chrome://extensions` after any change
+under `extension/`. Clips made while the helper is down are not saved at all —
+the popup says "Helper not running" and nothing is written, so nothing is
+silently lost.
+
+**Verified in real use** (2026-08-31): clips from suttacentral.net,
+accesstoinsight.org, Substack (Hebrew, own writing) and LinkedIn all filed
+correctly; `translator:` populated from a real SuttaCentral clip; the full
+chain — clip → auto-filed → queued → "ingest the inbox" → 13 wiki pages
+updated — worked end to end without moving a file by hand.
