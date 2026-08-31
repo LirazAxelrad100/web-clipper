@@ -62,6 +62,50 @@ but is off: it rewrites wiki pages unseen and costs tokens per clip. The ingest
 command is provider-neutral — `command` + `args` in config, so switching AI is a
 two-line change.
 
+## The ingest step — open issue
+
+This is the part that is *not* finished, and the reason is a constraint rather
+than a bug.
+
+**The problem.** The goal of this whole project is to keep the wiki updated with
+less work: clip something, and have it ingested into the wiki without typing
+anything. The clipper does the first half well. The second half — actually
+running the ingest — needs to launch an AI agent, and a local Node server can
+only launch a **command line** program.
+
+**Why it is not on.** There is no `claude` command on this machine. The Claude
+Code *desktop app* is installed, which is a different thing: a desktop app has
+no command the server can run. So `ingest.mode` is `"inbox"`, and every clip is
+queued in `clipper-inbox.md` at the vault root instead.
+
+**What is already built.** `server/ingest.js` is complete and tested against the
+failure paths. Setting `ingest.mode` to `"auto"` makes it run the configured
+command from the vault folder with `{{path}}` replaced by the new file, log to
+`logs/ingest.log`, and time out after 20 minutes. The clip is written to disk
+*before* the agent starts, so a failed ingest can never lose a clip. If the
+command is missing it says so in the popup rather than failing silently.
+
+**To switch it on**, install a command line agent and set `mode: "auto"`:
+
+    npm install -g @anthropic-ai/claude-code
+
+It is deliberately not Claude-specific — `command` and `args` are config, so
+Gemini CLI, Codex CLI, Aider or a hand-written script work just as well. That
+was a requirement: no lock-in to one AI.
+
+**The judgement call.** Even once the CLI exists, `"inbox"` stays the default.
+An automatic ingest rewrites wiki pages without showing anything first, and the
+vault's own ingest flow is written to be conversational — it reports takeaways
+and proposes pages *before* editing, and asks when a connection is uncertain.
+Running that unattended throws away the review step that makes it trustworthy,
+and costs tokens on every clip. The inbox is the compromise: no typing to
+remember what is new, but a human still says go.
+
+**If revisiting:** the interesting middle ground is batching — ingest everything
+in the inbox in one run, on demand or on a schedule, rather than one agent per
+clip. That keeps the review step meaningful and is far cheaper than per-clip
+runs.
+
 ## Things to avoid
 
 - **The vault is a different project.** This repo only *writes into*
