@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main id="app">
+
+    <!-- Shown while the page is being read -->
+    <section id="loading" class="state">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Reading the page…</p>
+    </section>
+
+    <!-- The helper app is not running -->
+    <section id="offline" class="state hidden">
+      <h1 class="state-title">Helper not running</h1>
+      <p class="state-body">
+        The clipper needs its local helper to write files into your vault.
+      </p>
+      <p class="state-body">Start it in Terminal:</p>
+      <code class="command" id="startCommand">npm start</code>
+      <button class="btn btn-secondary" id="retryBtn">Try again</button>
+    </section>
+
+    <!-- Something went wrong -->
+    <section id="error" class="state hidden">
+      <h1 class="state-title">Could not clip this page</h1>
+      <p class="state-body" id="errorMessage"></p>
+      <button class="btn btn-secondary" id="errorRetryBtn">Try again</button>
+    </section>
+
+    <!-- The main form -->
+    <section id="form" class="hidden">
+      <header class="header">
+        <h1 class="app-name">Clip to wiki</h1>
+        <span class="badge hidden" id="selectionBadge">selection only</span>
+      </header>
+
+      <label class="field">
+        <span class="field-label">Title</span>
+        <input type="text" id="titleInput" autocomplete="off" spellcheck="false">
+      </label>
+
+      <label class="field">
+        <span class="field-label">Folder</span>
+        <select id="folderSelect"></select>
+      </label>
+
+      <input type="text" id="newFolderInput" class="new-folder hidden"
+             placeholder="Name of the new folder" autocomplete="off">
+
+      <p class="reason" id="reason"></p>
+
+      <p class="warning hidden" id="privateWarning">
+        This looks like a draft or editor page. The saved
+        <strong>source</strong> link will only work for you — clip the published
+        page instead if you want a link others can open.
+      </p>
+
+      <label class="checkbox">
+        <input type="checkbox" id="queueCheckbox" checked>
+        <span id="queueLabel">Add to the ingest inbox</span>
+      </label>
+
+      <button class="btn btn-primary" id="clipBtn">Clip it</button>
+
+      <footer class="footer">
+        <span id="wordCount"></span>
+        <span id="pendingCount"></span>
+      </footer>
+    </section>
+
+    <!-- Saved -->
+    <section id="done" class="state hidden">
+      <div class="check" aria-hidden="true">✓</div>
+      <h1 class="state-title">Saved</h1>
+      <p class="saved-path" id="savedPath"></p>
+      <p class="state-body" id="savedNote"></p>
+    </section>
+
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+</html>

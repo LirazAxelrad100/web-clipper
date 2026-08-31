@@ -1,0 +1,117 @@
+{
+  "_comment": [
+    "This file decides which /raw folder a clipped page goes into.",
+    "You can edit it by hand any time — the server re-reads it on every clip,",
+    "so you do NOT need to restart anything after changing it.",
+    "",
+    "How scoring works:",
+    "  - a domain match is worth 100 points (very strong signal)",
+    "  - a keyword found in the title is worth 6 points",
+    "  - a keyword found in the body text is worth 1 point (max 8 per keyword)",
+    "  The folder with the highest score wins, as long as it beats 'minScore'.",
+    "  Below that, the clipper just asks you to pick.",
+    "",
+    "Folder names here must match the real folder names inside /raw.",
+    "If you create a new folder in Obsidian it shows up in the dropdown",
+    "automatically — adding it here is only needed if you want it auto-suggested."
+  ],
+
+  "minScore": 4,
+
+  "ownWriting": {
+    "_comment": "Your own posts are recognised by the author name, then split by language.",
+    "authorNames": ["Liraz Axelrad", "לירז אקסלרד"],
+    "hebrewFolder": "Substack-archive",
+    "otherFolder": "English writing"
+  },
+
+  "folders": [
+    {
+      "name": "buddhism",
+      "domains": [
+        "accesstoinsight.org",
+        "suttacentral.net",
+        "dharmaseed.org",
+        "tricycle.org",
+        "lionsroar.com",
+        "buddhistinquiry.org",
+        "hermesamara.org",
+        "dhammatalks.org",
+        "forestsangha.org",
+        "abhayagiri.org",
+        "plumvillage.org",
+        "insightmeditationcenter.org",
+        "tergar.org"
+      ],
+      "keywords": [
+        "sutta", "sutra", "dhamma", "dharma", "buddha", "buddhist", "buddhism",
+        "bhikkhu", "sangha", "nikaya", "pali", "vipassana", "satipatthana",
+        "metta", "samadhi", "nibbana", "nirvana", "anatta", "anicca", "dukkha",
+        "meditation", "mindfulness", "retreat", "ajahn", "rinpoche", "lama",
+        "monastery", "monastic", "contemplation", "impermanence", "renunciation",
+        "בודהיזם", "דהרמה", "מדיטציה", "תרגול", "ריטריט", "סוטרה", "נזיר"
+      ]
+    },
+    {
+      "name": "Work-PM-AI",
+      "domains": [
+        "productcompass.pm",
+        "lennysnewsletter.com",
+        "strategyshots.substack.com",
+        "parlance-labs.com",
+        "aibuilderclub.com",
+        "anthropic.com",
+        "claude.com",
+        "openai.com",
+        "github.com",
+        "docs.claude.com",
+        "mindtheproduct.com",
+        "svpg.com",
+        "reforge.com",
+        "producttalk.org",
+        "amplitude.com",
+        "intercom.com"
+      ],
+      "keywords": [
+        "product manager", "product management", "roadmap", "backlog", "stakeholder",
+        "discovery", "user research", "product strategy", "prioritization", "okr",
+        "go-to-market", "product-led", "prd", "spec", "user story", "a/b test",
+        "llm", "prompt", "prompting", "agent", "agentic", "rag", "eval", "evals",
+        "fine-tuning", "claude", "chatgpt", "copilot", "mcp", "embedding",
+        "ai tool", "workflow", "automation", "saas", "onboarding", "retention",
+        "metrics", "analytics", "north star"
+      ]
+    },
+    {
+      "name": "literature",
+      "domains": [
+        "poetryfoundation.org",
+        "poets.org",
+        "wordsfortheyear.com",
+        "theporouscity.com",
+        "deathexplored.com",
+        "tumblr.com",
+        "lithub.com",
+        "theparisreview.org",
+        "nybooks.com",
+        "newyorker.com",
+        "brainpickings.org",
+        "themarginalian.org",
+        "poemhunter.com",
+        "allpoetry.com"
+      ],
+      "keywords": [
+        "poem", "poems", "poet", "poetry", "stanza", "verse", "lyric",
+        "novel", "novelist", "fiction", "short story", "memoir", "essay",
+        "literature", "literary", "prose", "translated by", "translation",
+        "kafka", "shelley", "rilke", "oliver", "baldwin", "hillesum",
+        "שיר", "שירה", "משורר", "משוררת", "ספרות", "רומן", "תרגום", "פרוזה"
+      ]
+    },
+    {
+      "name": "English writing",
+      "domains": ["linkedin.com"],
+      "keywords": []
+    }
+  ]
+}

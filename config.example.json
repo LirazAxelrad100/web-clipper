@@ -1,0 +1,33 @@
+{
+  "vaultPath": "/Users/YOUR-NAME/Documents/Obsidian Vault",
+  "rawFolder": "raw",
+  "port": 4141,
+
+  "inbox": {
+    "enabled": true,
+    "file": "clipper-inbox.md"
+  },
+
+  "ingest": {
+    "_comment": [
+      "mode 'inbox'  — just queue the clip in the inbox file (default, nothing to install)",
+      "mode 'auto'   — run the command below straight after saving",
+      "mode 'off'    — do neither",
+      "",
+      "'command' is any command line AI agent. It is not tied to Claude:",
+      "  Claude Code : command 'claude',  args ['-p', '--permission-mode', 'acceptEdits']",
+      "  Gemini CLI  : command 'gemini',  args ['-p', '--yolo']",
+      "  Codex CLI   : command 'codex',   args ['exec', '--full-auto']",
+      "  Aider       : command 'aider',   args ['--yes', '--message']",
+      "  Your own    : any script that takes the prompt as its last argument",
+      "",
+      "It runs with the vault as its working directory, and {{path}} is replaced",
+      "with the new file's path inside the vault."
+    ],
+    "mode": "inbox",
+    "command": "claude",
+    "args": ["-p", "--permission-mode", "acceptEdits"],
+    "promptTemplate": "ingest {{path}}",
+    "timeoutMinutes": 20
+  }
+}
